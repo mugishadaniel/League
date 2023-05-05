@@ -30,8 +30,13 @@ namespace League.BL.Model
         
         public int? Gewicht { get;private set; }
 
-        public Team Team { get; set; }
+        public Team Team { get;private set; }
 
+        public void VerwijderTeam()
+        {
+            if (Team == null) { throw new Exceptions.SpelerException("Speler heeft geen team");}
+            Team = null;
+        }
 
         public void ZetNaam(string naam)
         {
@@ -76,6 +81,40 @@ namespace League.BL.Model
                 throw new Exceptions.SpelerException("Rugnummer moet tussen 1 en 99 liggen");
             }
             RugNummer = rugNummer;
+        }
+
+        public void ZetTeam(Team team)
+        {
+            if (team == null)
+            {
+                throw new Exceptions.SpelerException("Team is verplicht");
+            }
+
+            if(Team == team) { throw new Exceptions.SpelerException("Speler is al toegevoegd aan dit team"); }
+
+
+            if (!Team.HeeftSpeler(this))
+            {
+                Team.VerwijderSpeler(this);
+            }
+            else
+            {
+                team.VoegSpelerToe(this);
+                Team = team;
+            }
+
+
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return obj is Speler speler &&
+                   Id == speler.Id;
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(Id);
         }
     }
 }
