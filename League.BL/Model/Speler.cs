@@ -1,4 +1,5 @@
-﻿using System;
+﻿using League.BL.Exceptions;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,14 +9,15 @@ namespace League.BL.Model
 {
     public class Speler
     {
-        internal Speler(string naam, int? lengte, int? gewicht)
+        //moet allemaal internal zijn
+        public Speler(string naam, int? lengte, int? gewicht)
         {
             ZetNaam(naam);
             if (lengte !=null) ZetLengte(lengte.Value);
             if (gewicht != null) ZetGewicht(gewicht.Value);
         }
 
-        internal Speler(int id, string naam, int? lengte, int? gewicht) : this(naam, lengte, gewicht)
+        public Speler(int id, string naam, int? lengte, int? gewicht) : this(naam, lengte, gewicht)
         {
             ZetId(id);
         }
@@ -85,22 +87,16 @@ namespace League.BL.Model
 
         public void ZetTeam(Team team)
         {
-            if (team == null)
+            if (team == null) throw new SpelerException("zetteam- team is null");
+            if (Team == team) throw new SpelerException("zetteam - zelfde team");
+            if (Team != null)
             {
-                throw new Exceptions.SpelerException("Team is verplicht");
+                if (Team.HeeftSpeler(this)) Team.VerwijderSpeler(this);
             }
-
-            if(Team == team) { throw new Exceptions.SpelerException("Speler is al toegevoegd aan dit team"); }
-
-
-            if (!Team.HeeftSpeler(this))
+            if (!team.HeeftSpeler(this))
             {
-                Team.VerwijderSpeler(this);
-            }
-            else
-            {
-                team.VoegSpelerToe(this);
                 Team = team;
+                team.VoegSpelerToe(this);
             }
 
 

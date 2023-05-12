@@ -2,7 +2,8 @@
 {
     public class Team
     {
-        internal Team(int stamNummer, string naam)
+        //moet internal zijn
+        public Team(int stamNummer, string naam)
         {
             ZetStamNummer(stamNummer);
             ZetNaam(naam);

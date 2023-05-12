@@ -18,3 +18,5 @@ using System.Runtime.InteropServices;
 
 [assembly: Guid("bace7650-c8fa-4a9e-8321-4ef595079480")]
 [assembly: InternalsVisibleTo("TestDomain")]
+[assembly: InternalsVisibleTo("League.DL")]
+[assembly: InternalsVisibleTo("ConsoleAppSpelerManager")]
